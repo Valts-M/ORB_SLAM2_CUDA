@@ -44,6 +44,7 @@ LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 find_package(OpenCV 4.1.0 REQUIRED)
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
+find_package(realsense2 REQUIRED)
 
 set(EIGEN3_INCLUDE_DIR /usr/local/include/eigen3)
 
@@ -52,6 +53,7 @@ ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/include
 ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
+${realsense2_INCLUDE_DIRS}
 )
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
@@ -84,6 +86,8 @@ src/cuda/Allocator_gpu.cu
 src/cuda/Fast_gpu.cu
 src/cuda/Orb_gpu.cu
 src/cuda/Cuda.cu
+src/funcFormat.cpp
+src/funcStream.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -92,6 +96,7 @@ ${EIGEN3_LIBS}
 ${Pangolin_LIBRARIES}
 ${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
 ${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
+${realsense2_LIBRARY}
 nvToolsExt
 )
 
@@ -113,6 +118,11 @@ target_link_libraries(mono_tum ${PROJECT_NAME})
 add_executable(mono_kitti Examples/Monocular/mono_kitti.cc)
 target_link_libraries(mono_kitti ${PROJECT_NAME})
 
+add_executable(realsense_rgbd Examples/RGB-D/realsense_d435i.cpp)
+target_link_libraries(realsense_rgbd ${PROJECT_NAME})
+
+add_executable(realsense_mono Examples/Monocular/realsense_d435i.cpp)
+target_link_libraries(realsense_mono ${PROJECT_NAME})
 endif() # Build Examples
 
 unset(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
