@@ -118,11 +118,11 @@ target_link_libraries(mono_tum ${PROJECT_NAME})
 add_executable(mono_kitti Examples/Monocular/mono_kitti.cc)
 target_link_libraries(mono_kitti ${PROJECT_NAME})
 
-add_executable(realsense_mono Examples/RGB-D/realsense_d435i.cpp)
-target_link_libraries(realsense_mono ${PROJECT_NAME})
-
-add_executable(realsense_rgbd Examples/Monocular/realsense_d435i.cpp)
+add_executable(realsense_rgbd Examples/RGB-D/realsense_d435i.cpp)
 target_link_libraries(realsense_rgbd ${PROJECT_NAME})
+
+add_executable(realsense_mono Examples/Monocular/realsense_d435i.cpp)
+target_link_libraries(realsense_mono ${PROJECT_NAME})
 
 
 endif() # Build Examples

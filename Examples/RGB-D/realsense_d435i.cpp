@@ -34,7 +34,7 @@ int main(int argc, char * argv[]) try
 	cout << "Start processing sequence ..." << endl;
 
 	cv::Mat frame1, frame2, input1, input2;
-	bool slam = false;
+	bool slam = true;
 	double tframe;
 
 	std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
@@ -71,7 +71,6 @@ int main(int argc, char * argv[]) try
 
 		cv::Size size = input1.size();
 		cv::putText(input1, str, cv::Point(10, size.height - 10), inforerFontA, 1, inforerColorFA, 1, cv::LINE_AA);
-		cv::putText(input1, str, cv::Point(10, size.height - 10), inforerFontB, 1, inforerColorFB, 1, cv::LINE_AA);
 
 		//cv::imshow("Road facing camera", input1);
 		//cv::imshow("Depth", input2);

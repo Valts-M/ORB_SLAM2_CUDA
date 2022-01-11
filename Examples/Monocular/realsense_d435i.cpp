@@ -26,8 +26,8 @@ int main(int argc, char * argv[]) try
 	cout << endl << "-------" << endl;
 	cout << "Start processing sequence ..." << endl;
 
-	cv::Mat frame1, frame2, input1, input2;
-	bool slam = false;
+	cv::Mat frame1, input1;
+	bool slam = true;
 	double tframe;
 
 	std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
