@@ -54,9 +54,12 @@ ${PROJECT_SOURCE_DIR}/include
 ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
 ${realsense2_INCLUDE_DIRS}
+${PROJECT_SOURCE_DIR}/Thirdparty/cuda-bundle-adjustment/include
 )
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+
+link_directories(${PROJECT_SOURCE_DIR}/Thirdparty/cuda-bundle-adjustment/lib)
 
 cuda_include_directories(
   ${CUDA_TOOLKIT_ROOT_DIR}/samples/common/inc
@@ -98,6 +101,9 @@ ${realsense2_LIBRARY}
 ${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
 ${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
 nvToolsExt
+cuda_bundle_adjustment
+${CUDA_cusparse_LIBRARY}
+${CUDA_cusolver_LIBRARY}
 )
 
 # Build examples
@@ -106,22 +112,22 @@ message(STATUS "Don't build examples")
 else ()
 message(STATUS "Build examples")
 
-add_executable(rgbd_tum Examples/RGB-D/rgbd_tum.cc)
+cuda_add_executable(rgbd_tum Examples/RGB-D/rgbd_tum.cc)
 target_link_libraries(rgbd_tum ${PROJECT_NAME})
 
-add_executable(stereo_kitti Examples/Stereo/stereo_kitti.cc)
+cuda_add_executable(stereo_kitti Examples/Stereo/stereo_kitti.cc)
 target_link_libraries(stereo_kitti ${PROJECT_NAME})
 
-add_executable(mono_tum Examples/Monocular/mono_tum.cc)
+cuda_add_executable(mono_tum Examples/Monocular/mono_tum.cc)
 target_link_libraries(mono_tum ${PROJECT_NAME})
 
-add_executable(mono_kitti Examples/Monocular/mono_kitti.cc)
+cuda_add_executable(mono_kitti Examples/Monocular/mono_kitti.cc)
 target_link_libraries(mono_kitti ${PROJECT_NAME})
 
-add_executable(realsense_rgbd Examples/RGB-D/realsense_d435i.cpp)
+cuda_add_executable(realsense_rgbd Examples/RGB-D/realsense_d435i.cpp)
 target_link_libraries(realsense_rgbd ${PROJECT_NAME})
 
-add_executable(realsense_mono Examples/Monocular/realsense_d435i.cpp)
+cuda_add_executable(realsense_mono Examples/Monocular/realsense_d435i.cpp)
 target_link_libraries(realsense_mono ${PROJECT_NAME})
 
 
