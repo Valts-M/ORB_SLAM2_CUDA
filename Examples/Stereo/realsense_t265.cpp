@@ -37,17 +37,24 @@ int main(int argc, char * argv[]) try
 
 	std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point t2 = t1;
+	std::chrono::steady_clock::time_point t3;
+	std::chrono::steady_clock::time_point t4;
+
 	typedef std::chrono::duration<double, std::ratio<1, 1000>> ms;
 
 	for (;;)
 	{
 		rs2::frameset data = pipeline.wait_for_frames();
-		t1 = std::chrono::steady_clock::now();
 
+		t3 = std::chrono::steady_clock::now();
 		frame1 = funcFormat::frame2Mat(data.get_fisheye_frame(1));
 		frame2 = funcFormat::frame2Mat(data.get_fisheye_frame(2));
 		rectifier.rectify(frame1, frame2, input1, input2);
+		t4 = std::chrono::steady_clock::now();
 
+		std::cout << "Rec" << std::chrono::duration_cast<ms>(t4 - t3).count() << '\n';
+
+		t1 = std::chrono::steady_clock::now();
 		tframe = std::chrono::duration_cast<ms>(t1 - t2).count();
 		if (slam)
 		{
