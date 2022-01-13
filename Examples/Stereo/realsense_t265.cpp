@@ -13,23 +13,21 @@
 #include <funcStream.h>
 #include <Utils.hpp>
 
+#include "StereoRectifier.h"
+
 int main(int argc, char * argv[]) try
 {
+	ORB_SLAM2::stereo_rectifier rectifier{argv[2], true};
+
 	// RealSense settings
 	rs2::pipeline pipeline;
 	rs2::config config;
-	config.enable_stream(RS2_STREAM_COLOR, 640, 480, RS2_FORMAT_BGR8, 30);
-	config.enable_stream(RS2_STREAM_DEPTH, 640, 480, RS2_FORMAT_Z16, 30);
+    config.enable_stream(RS2_STREAM_FISHEYE, 1, RS2_FORMAT_Y8, 30);
+    config.enable_stream(RS2_STREAM_FISHEYE, 2, RS2_FORMAT_Y8, 30);
 	rs2::pipeline_profile cfg = pipeline.start(config);
 
-	rs2::align alignTo(RS2_STREAM_COLOR);
-	// rs2::decimation_filter filterDec;
-	// rs2::spatial_filter filterSpat;
-	// rs2::temporal_filter filterTemp;
-	// filterSpat.set_option(RS2_OPTION_HOLES_FILL, 5);
-
 	// ORB SLAM settings
-	ORB_SLAM2::System SLAM(argv[1], argv[2], ORB_SLAM2::System::RGBD, true);
+	ORB_SLAM2::System SLAM(argv[1], argv[2], ORB_SLAM2::System::STEREO, true);
 	cout << endl << "-------" << endl;
 	cout << "Start processing sequence ..." << endl;
 
@@ -44,22 +42,17 @@ int main(int argc, char * argv[]) try
 	for (;;)
 	{
 		rs2::frameset data = pipeline.wait_for_frames();
-		rs2::frameset alignedFrame = alignTo.process(data);
-		rs2::depth_frame depth = alignedFrame.get_depth_frame();
-		// depth = filterSpat.process(depth);
-		// depth = filterTemp.process(depth);
-
-		frame1 = funcFormat::frame2Mat(alignedFrame.get_color_frame());
-		frame2 = funcFormat::frame2Mat(depth);
-		input1 = frame1.clone();
-		input2 = frame2.clone();
-
 		t1 = std::chrono::steady_clock::now();
+
+		frame1 = funcFormat::frame2Mat(data.get_fisheye_frame(1));
+		frame2 = funcFormat::frame2Mat(data.get_fisheye_frame(2));
+		rectifier.rectify(frame1, frame2, input1, input2);
+
 		tframe = std::chrono::duration_cast<ms>(t1 - t2).count();
 		if (slam)
 		{
         	PUSH_RANGE("Track image", 4);
-			SLAM.TrackRGBD(input1, input2, tframe);
+			SLAM.TrackStereo(input1, input2, tframe);
         	POP_RANGE;
 		}
 		t2 = t1;

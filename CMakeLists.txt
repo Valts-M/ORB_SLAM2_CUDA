@@ -45,6 +45,7 @@ find_package(OpenCV 4 REQUIRED)
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
 find_package(realsense2 REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 set(EIGEN3_INCLUDE_DIR /usr/local/include/eigen3)
 
@@ -54,6 +55,7 @@ ${PROJECT_SOURCE_DIR}/include
 ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
 ${realsense2_INCLUDE_DIRS}
+${YAML_CPP_INCLUDE_DIRS}
 )
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
@@ -82,6 +84,7 @@ src/KeyFrameDatabase.cc
 src/Sim3Solver.cc
 src/Initializer.cc
 src/Viewer.cc
+src/StereoRectifier.cc
 src/cuda/Allocator_gpu.cu
 src/cuda/Fast_gpu.cu
 src/cuda/Orb_gpu.cu
@@ -94,6 +97,7 @@ target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
 ${EIGEN3_LIBS}
 ${Pangolin_LIBRARIES}
+${YAML_CPP_LIBRARIES}
 ${realsense2_LIBRARY}
 ${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2/lib/libDBoW2.so
 ${PROJECT_SOURCE_DIR}/Thirdparty/g2o/lib/libg2o.so
@@ -124,6 +128,8 @@ target_link_libraries(realsense_rgbd ${PROJECT_NAME})
 add_executable(realsense_mono Examples/Monocular/realsense_d435i.cpp)
 target_link_libraries(realsense_mono ${PROJECT_NAME})
 
+add_executable(realsense_t265 Examples/Stereo/realsense_t265.cpp)
+target_link_libraries(realsense_t265 ${PROJECT_NAME})
 
 endif() # Build Examples
 
