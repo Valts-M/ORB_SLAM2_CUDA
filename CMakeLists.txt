@@ -131,6 +131,9 @@ target_link_libraries(realsense_mono ${PROJECT_NAME})
 add_executable(realsense_t265 Examples/Stereo/realsense_t265.cpp)
 target_link_libraries(realsense_t265 ${PROJECT_NAME})
 
+add_executable(realsense_t265_mono Examples/Monocular/realsense_t265.cpp)
+target_link_libraries(realsense_t265_mono ${PROJECT_NAME})
+
 endif() # Build Examples
 
 unset(CMAKE_RUNTIME_OUTPUT_DIRECTORY)
