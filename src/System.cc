@@ -269,6 +269,22 @@ void System::Reset()
     mbReset = true;
 }
 
+void System::StopOtherThreads() const
+{
+    mpLocalMapper->RequestStop();
+
+    // Wait until Local Mapping has effectively stopped
+    while(!mpLocalMapper->isStopped())
+    {
+        usleep(1000);
+    }
+    
+    while(mpLoopCloser->isRunningGBA())
+    {
+        usleep(1000);
+    }
+}
+
 void System::Shutdown()
 {
     mpLocalMapper->RequestFinish();
@@ -357,6 +373,13 @@ void System::SaveTrajectoryTUM(const string &filename)
     }
     f.close();
     cout << endl << "trajectory saved!" << endl;
+}
+
+void System::SaveMapDatabase(const std::string& path) const {
+    StopOtherThreads();
+    io::map_database_io map_db_io(cam_db_, map_db_, bow_db_, bow_vocab_);
+    map_db_io.save_message_pack(path);
+    mpLocalMapper->Release();
 }
 
 

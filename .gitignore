@@ -1,6 +1,9 @@
 *.swp
 build/
 log/
+cmake-build-debug/
+cmake-build-release/
+.idea/
 Examples/Monocular/mono_kitti
 Examples/Monocular/mono_tum
 Examples/RGB-D/rgbd_tum

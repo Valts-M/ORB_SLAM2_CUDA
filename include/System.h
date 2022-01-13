@@ -93,6 +93,9 @@ public:
     // This function must be called before saving the trajectory.
     void Shutdown();
 
+    void SaveMapDatabase(const std::string& path) const;
+
+
     // Save camera trajectory in the TUM RGB-D dataset format.
     // Call first Shutdown()
     // See format details at: http://vision.in.tum.de/data/datasets/rgbd-dataset
@@ -122,6 +125,8 @@ public:
     FrameDrawer* GetpFrameDrawer(void);
 
 private:
+
+    void StopOtherThreads() const;
 
     // Input sensor
     eSensor mSensor;
