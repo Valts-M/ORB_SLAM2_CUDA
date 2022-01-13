@@ -24,7 +24,9 @@ namespace funcFormat
 		}
 		else if (f.get_profile().format() == RS2_FORMAT_Y8)
 		{
-			return cv::Mat(cv::Size(w, h), CV_8UC1, (void*)f.get_data(), cv::Mat::AUTO_STEP);;
+			auto im = cv::Mat(cv::Size(w, h), CV_8UC1, (void*)f.get_data(), cv::Mat::AUTO_STEP);
+			cv::resize(im, im, cv::Size(w/2, h/2));
+			return im;
 		}
 
 		throw std::runtime_error("Frame format is not supported yet!");
