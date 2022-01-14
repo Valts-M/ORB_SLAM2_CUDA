@@ -1,10 +1,3 @@
-#include "openvslam/data/frame.h"
-#include "openvslam/data/keyframe.h"
-#include "openvslam/data/landmark.h"
-#include "openvslam/data/camera_database.h"
-#include "openvslam/data/bow_database.h"
-#include "openvslam/data/map_database.h"
-#include "openvslam/io/map_database_io.h"
 #include "MapIO.h"
 
 #include <spdlog/spdlog.h>
@@ -14,29 +7,27 @@
 
 namespace ORB_SLAM2 {
 
-MapIO::MapIO(Map* map, KeyFrameDatabase* keyframeDb, ORBVocabulary* orbVocab)
-    : cam_db_(cam_db), map_db_(map_db), bow_db_(bow_db), bow_vocab_(bow_vocab) {}
+MapIO::MapIO(Data::Map* map, Data::KeyFrameDatabase* keyframeDb, Data::ORBVocabulary* orbVocab)
+    :  map_(map), keyframeDb_(keyframeDb), orbVocab_(orbVocab) {}
 
 void MapIO::SaveMap(const std::string& path) {
-    std::lock_guard<std::mutex> lock(data::map_database::mtx_database_);
+    std::lock_guard<std::mutex> lock(map_->mMutexMapUpdate);
 
-    assert(cam_db_ && map_db_);
-    const auto cameras = cam_db_->to_json();
+    assert(map_);
     nlohmann::json keyfrms;
     nlohmann::json landmarks;
-    map_db_->to_json(keyfrms, landmarks);
+    map_->ToJson(keyfrms, landmarks);
 
-    nlohmann::json json{{"cameras", cameras},
-                        {"keyframes", keyfrms},
+    nlohmann::json json{{"keyframes", keyfrms},
                         {"landmarks", landmarks},
-                        {"frame_next_id", static_cast<unsigned int>(data::frame::next_id_)},
-                        {"keyframe_next_id", static_cast<unsigned int>(data::keyframe::next_id_)},
-                        {"landmark_next_id", static_cast<unsigned int>(data::landmark::next_id_)}};
+                        {"frame_next_id", static_cast<unsigned int>(Frame::nNextId)},
+                        {"keyframe_next_id", static_cast<unsigned int>(KeyFrame::nNextId)},
+                        {"landmark_next_id", static_cast<unsigned int>(MapPoint::nNextId)}};
 
     std::ofstream ofs(path, std::ios::out | std::ios::binary);
 
     if (ofs.is_open()) {
-        spdlog::info("save the MessagePack file of database to {}", path);
+        cout << "save the MessagePack file of database to " << path << '\n';
         const auto msgpack = nlohmann::json::to_msgpack(json);
         ofs.write(reinterpret_cast<const char*>(msgpack.data()), msgpack.size() * sizeof(uint8_t));
         ofs.close();

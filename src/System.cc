@@ -78,6 +78,9 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     //Create the Map
     mpMap = new Map();
 
+    //Create MapIO
+    mpMapIO = new MapIO(mpMap, mpKeyFrameDatabase, mpVocabulary);
+
     //Create Drawers. These are used by the Viewer
     mpFrameDrawer = new FrameDrawer(mpMap);
     mpMapDrawer = new MapDrawer(mpMap, strSettingsFile);

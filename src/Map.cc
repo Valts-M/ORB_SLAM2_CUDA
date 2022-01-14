@@ -52,6 +52,38 @@ void Map::EraseMapPoint(MapPoint *pMP)
     // Delete the MapPoint
 }
 
+void Map::ToJson(nlohmann::json& jsonKeyFrames, nlohmann::json& jsonMapPoints)
+{
+    unique_lock<mutex> lock(mMutexMap);
+
+    std::map<std::string, nlohmann::json> keyfrms;
+    for (const auto id_keyfrm : mspKeyFrames) {
+        const auto id = id_keyfrm->mnFrameId;
+        const auto keyfrm = id_keyfrm.second;
+        assert(keyfrm);
+        assert(id == keyfrm->id_);
+        assert(!keyfrm->will_be_erased());
+        keyfrm->graph_node_->update_connections();
+        assert(!keyfrms.count(std::to_string(id)));
+        keyfrms[std::to_string(id)] = keyfrm->to_json();
+    }
+    jsonKeyFrames = keyfrms;
+
+    // Save each 3D point as json
+    std::map<std::string, nlohmann::json> landmarks;
+    for (const auto id_lm : landmarks_) {
+        const auto id = id_lm.first;
+        const auto& lm = id_lm.second;
+        assert(lm);
+        assert(id == lm->id_);
+        assert(!lm->will_be_erased());
+        lm->update_normal_and_depth();
+        assert(!landmarks.count(std::to_string(id)));
+        landmarks[std::to_string(id)] = lm->to_json();
+    }
+    jsonMapPoints = landmarks;
+}
+
 void Map::EraseKeyFrame(KeyFrame *pKF)
 {
     unique_lock<mutex> lock(mMutexMap);

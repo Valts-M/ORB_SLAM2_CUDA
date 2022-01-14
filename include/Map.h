@@ -24,10 +24,8 @@
 #include "MapPoint.h"
 #include "KeyFrame.h"
 #include <set>
-
 #include <mutex>
-
-
+#include <nlohmann/json.hpp>
 
 namespace ORB_SLAM2
 {
@@ -45,6 +43,8 @@ public:
     void EraseMapPoint(MapPoint* pMP);
     void EraseKeyFrame(KeyFrame* pKF);
     void SetReferenceMapPoints(const std::vector<MapPoint*> &vpMPs);
+    void ToJson(nlohmann::json& jsonKeyFrames, nlohmann::json& jsonMapPoints);
+    void FromJson(KeyFrameDatabase* keyframeDb, ORBVocabulary* orbVocab);
 
     std::vector<KeyFrame*> GetAllKeyFrames();
     std::vector<MapPoint*> GetAllMapPoints();

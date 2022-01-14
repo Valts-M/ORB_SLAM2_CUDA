@@ -48,7 +48,7 @@ int main(int argc, char * argv[]) try
 
 		t3 = std::chrono::steady_clock::now();
 		frame1 = funcFormat::frame2Mat(data.get_fisheye_frame(1));
-		cv::resize(frame1, frame1, frame1.size()/2);
+//		cv::resize(frame1, frame1, frame1.size()/2);
 		rectifier.rectify(frame1, input1);
 		t4 = std::chrono::steady_clock::now();
 

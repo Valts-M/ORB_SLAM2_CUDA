@@ -9,12 +9,19 @@
 
 namespace ORB_SLAM2 {
 
+namespace Data {
+class KeyFrameDatabase;
+class Map;
+class ORBVocabulary;
+} // namespace data
+
+
 class MapIO {
 public:
     /**
      * Constructor
      */
-    MapIO(Map* map, KeyFrameDatabase* keyframeDb, ORBVocabulary* orbVocab);
+    MapIO(Data::Map* map, Data::KeyFrameDatabase* keyframeDb, Data::ORBVocabulary* orbVocab);
 
     /**
      * Destructor
@@ -34,11 +41,11 @@ public:
 private:
 
     //! map_database
-    Map* const map_ = nullptr;
+    Data::Map* const map_ = nullptr;
     //! BoW database
-    KeyFrameDatabase* const keyframeDb_ = nullptr;
+    Data::KeyFrameDatabase* const keyframeDb_ = nullptr;
     //! BoW vocabulary
-    ORBVocabulary* const orbVocab_ = nullptr;
+    Data::ORBVocabulary* const orbVocab_ = nullptr;
 };
 
 } // namespace ORB_SLAM2

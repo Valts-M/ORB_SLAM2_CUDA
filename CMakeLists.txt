@@ -52,10 +52,13 @@ find_package(yaml-cpp REQUIRED)
 
 set(EIGEN3_INCLUDE_DIR /usr/local/include/eigen3)
 
+set(json_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/Thirdparty/json/include)
+
 include_directories(
 ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/include
 ${EIGEN3_INCLUDE_DIR}
+${json_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
 ${realsense2_INCLUDE_DIRS}
 ${YAML_CPP_INCLUDE_DIRS}

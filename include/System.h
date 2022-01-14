@@ -38,6 +38,7 @@
 #include "KeyFrameDatabase.h"
 #include "ORBVocabulary.h"
 #include "Viewer.h"
+#include "MapIO.h"
 
 namespace ORB_SLAM2
 {
@@ -139,6 +140,9 @@ private:
 
     // Map structure that stores the pointers to all KeyFrames and MapPoints.
     Map* mpMap;
+
+    // Utility for map saving and loading
+    MapIO* mpMapIO;
 
     // Tracker. It receives a frame and computes the associated camera pose.
     // It also decides when to insert a new keyframe, create some new MapPoints and
