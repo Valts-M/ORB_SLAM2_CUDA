@@ -27,8 +27,6 @@
 
 #include <mutex>
 
-
-
 namespace ORB_SLAM2
 {
 
@@ -45,6 +43,8 @@ public:
     void EraseMapPoint(MapPoint* pMP);
     void EraseKeyFrame(KeyFrame* pKF);
     void SetReferenceMapPoints(const std::vector<MapPoint*> &vpMPs);
+    void Save( const string &filename );
+    void GetMapPointsIdx();
 
     std::vector<KeyFrame*> GetAllKeyFrames();
     std::vector<MapPoint*> GetAllMapPoints();
@@ -65,6 +65,9 @@ public:
     std::mutex mMutexPointCreation;
 
 protected:
+    void SaveMapPoint( ofstream &f, MapPoint* mp );
+    void SaveKeyFrame( ofstream &f, KeyFrame* kf );
+
     std::set<MapPoint*> mspMapPoints;
     std::set<KeyFrame*> mspKeyFrames;
 
@@ -73,6 +76,8 @@ protected:
     long unsigned int mnMaxKFid;
 
     std::mutex mMutexMap;
+
+    std::map<MapPoint*, unsigned long int> mmpnMapPointsIdx;
 };
 
 } //namespace ORB_SLAM

@@ -93,7 +93,7 @@ public:
     // This function must be called before saving the trajectory.
     void Shutdown();
 
-    void SaveMapDatabase(const std::string& path) const;
+    void SaveMap(const std::string& path) const;
 
 
     // Save camera trajectory in the TUM RGB-D dataset format.

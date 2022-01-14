@@ -60,6 +60,18 @@ cv::Mat Converter::toCvMat(const g2o::Sim3 &Sim3)
     return toCvSE3(s*eigR,eigt);
 }
 
+cv::Mat Converter::toCvMat( const std::vector<float>& v )
+{
+    Eigen::Quaterniond q;
+    q.x()  = v[0];
+    q.y()  = v[1];
+    q.z()  = v[2];
+    q.w()  = v[3];
+    Eigen::Matrix<double,3,3>eigMat(q);
+    cv::Mat M = toCvMat(eigMat);
+    return M;
+}
+
 cv::Mat Converter::toCvMat(const Eigen::Matrix<double,4,4> &m)
 {
     cv::Mat cvMat(4,4,CV_32F);

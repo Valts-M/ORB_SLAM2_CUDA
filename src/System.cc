@@ -375,11 +375,14 @@ void System::SaveTrajectoryTUM(const string &filename)
     cout << endl << "trajectory saved!" << endl;
 }
 
-void System::SaveMapDatabase(const std::string& path) const {
-    StopOtherThreads();
-    io::map_database_io map_db_io(cam_db_, map_db_, bow_db_, bow_vocab_);
-    map_db_io.save_message_pack(path);
-    mpLocalMapper->Release();
+void System::SaveMap(const std::string& path) const 
+{
+    if(!mpLocalMapper->isFinished() || !mpLoopCloser->isFinished()  || mpLoopCloser->isRunningGBA())
+    {
+        cerr << "Can't save map before shutting down SLAM!" << '\n';
+        exit(-1);
+    }
+    mpMap->Save(path);
 }
 
 
